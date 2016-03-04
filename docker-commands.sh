@@ -120,7 +120,7 @@ fi
 
 if [ "$command" = "5" ]; then
 
-  echo -e "Run in background? [y/N]"
+  echo -e "Run in background? [Y/n]"
 
   read accept
 
