@@ -12,7 +12,6 @@ sh build-docker-image.sh or simply execute it from the docker command #10
 <img src="welcome-screen.jpg" align="center" />
 
 # Contributors
-  - Yoanis Gil for the build-docker-image.sh shell script. https://github.com/yoanisgil
   - Crakmedia http://www.crakmedia.com/
 
 
