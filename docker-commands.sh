@@ -61,7 +61,7 @@ fi
 if [ "$command" = "1" ]; then
   echo -e "\e[1;30;43m-- Starting to build docker image --\e[0m"
   docker build -t $imagename:$version .
-  exit 1;
+  exit 0;
 fi
 
 if [ "$command" = "2" ]; then
@@ -88,7 +88,7 @@ if [ "$command" = "3" ]; then
   echo -e "\e[1;30;43m-- Starting task install php dependencies --\e[0m"
   docker run -v "$HOME"/.ssh:/root/.ssh -v $(pwd):/app composer/composer install
  
-  exit 3;
+  exit 0;
 fi
 
 
@@ -115,7 +115,7 @@ if [ "$command" = "4" ]; then
       echo -e "\e[0;42mTask Shell script ran successfully\e[0m"
   fi
 
-  exit 4;
+  exit 0;
 fi
 
 if [ "$command" = "5" ]; then
@@ -126,18 +126,18 @@ if [ "$command" = "5" ]; then
 
   if [ "$accept" != "Y" ]; then 
     docker-compose up
-    exit 5;
+    exit 0;
   fi
 
   docker-compose up -d
 
-  exit 5;
+  exit 0;
 fi
 
 
 if [ "$command" = "6" ]; then
   docker-compose restart
-  exit 6;
+  exit 0;
 fi
 
 if [ "$command" = "7" ]; then
@@ -145,7 +145,7 @@ if [ "$command" = "7" ]; then
   docker-compose stop
   docker-compose rm
 
-  exit 7;
+  exit 0;
 fi
 
 
@@ -156,18 +156,18 @@ fi
 
 if [ "$command" = "9" ]; then
   docker images
-  exit 9;
+  exit 0;
 fi
 
 if [ "$command" = "10" ]; then
   echo -e "\e[0;42mBuild Docker Image.\e[0m";
   sh ./docker/build-docker-image.sh
-  exit 10;
+  exit 0;
 fi
 
 if [ "$command" = "11" ]; then
   docker rmi $(docker images --quiet --filter "dangling=true")
-  exit 11;
+  exit 0;
 fi
 
 if [ "$command" = "12" ]; then
@@ -176,12 +176,12 @@ if [ "$command" = "12" ]; then
     read -r removeimagename;
   done
   docker rmi -f $(docker images | grep $removeimagename | awk '{ print $3 }')
-  exit 12;
+  exit 0;
 fi
 
 if [ "$command" = "13" ]; then
   docker login
-  exit 13;
+  exit 0;
 fi
 
 if [ "$command" = "14" ]; then
@@ -190,7 +190,7 @@ if [ "$command" = "14" ]; then
     read -r containerid;
   done
   docker inspect $containerid
-  exit 14;
+  exit 0;
 fi
 
 if [ "$command" = "15" ]; then
@@ -205,14 +205,14 @@ if [ "$command" = "15" ]; then
 
   if [ "$needle" = "" ]; then
     docker logs -f $containerid
-    exit 15;
+    exit 0;
   fi
   docker logs -f $containerid 2>&1 | grep $needle
-  exit 15;
+  exit 0;
 fi
 
 if [ "$command" = "16" ]; then
   docker ps -q | xargs docker stats
-  exit 16;
+  exit 0;
 fi
 
