@@ -166,7 +166,7 @@ if [ "$command" = "10" ]; then
 fi
 
 if [ "$command" = "11" ]; then
-  docker rmi $(docker images --quiet --filter "dangling=true")
+  docker rmi -f $(docker images --quiet --filter "dangling=true")
   exit 0;
 fi
 
