@@ -1,6 +1,6 @@
 # Docker Commands
 
-Project was built to simplify the Docker learning curve for a dev or an IT team dev to docker usage.
+Docker COmmands was built to simplify the Docker learning curve for a dev or an IT team.
 Just symlink the shell script to your /usr/local/bin and you should be able to use it from any project directory.
 
     ln -sfn docker-commands.sh /usr/local/bin/docker-commands.sh

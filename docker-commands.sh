@@ -4,11 +4,11 @@ cat << "EOF"
 
 
 
-    ____             __                __________                                      __
+    ____             __                __________                                      __    
    / __ \____  _____/ /_____  _____   / ____/ __ \____ ___  ____ ___  ____ _____  ____/ /____
   / / / / __ \/ ___/ //_/ _ \/ ___/  / /   / / / / __ `__ \/ __ `__ \/ __ `/ __ \/ __  / ___/
- / /_/ / /_/ / /__/ ,< /  __/ /     / /___/ /_/ / / / / / / / / / / / /_/ / / / / /_/ (__  )
-/_____/\____/\___/_/|_|\___/_/      \____/\____/_/ /_/ /_/_/ /_/ /_/\__,_/_/ /_/\__,_/____/
+ / /_/ / /_/ / /__/ ,< /  __/ /     / /___/ /_/ / / / / / / / / / / / /_/ / / / / /_/ (__  ) 
+/_____/\____/\___/_/|_|\___/_/      \____/\____/_/ /_/ /_/_/ /_/ /_/\__,_/_/ /_/\__,_/____/  
 
 
  * * * * * * * * * * * * * *  * * *  * * *  * * * *
@@ -66,7 +66,7 @@ if [ "$command" = "1" ]; then
 fi
 
 if [ "$command" = "2" ]; then
-
+  
   echo -e "\e[1;30;43m-- Starting to push image to docker hub --\e[0m"
   docker push $imagename:$version
 
@@ -88,7 +88,7 @@ if [ "$command" = "3" ]; then
 
   echo -e "\e[1;30;43m-- Starting task install php dependencies --\e[0m"
   docker run -v "$HOME"/.ssh:/root/.ssh -v $(pwd):/app composer/composer install
-
+ 
   exit 0;
 fi
 
@@ -107,8 +107,8 @@ if [ "$command" = "4" ]; then
 
   echo -e "\e[1;30;43m-- Starting shell script in node container --\e[0m"
   docker run -ti --rm -v ~/.ssh:/root/.ssh -v $(pwd):/tmp/build -w /tmp/build node:$nodeversion $shpath;
-
-  if [ $? -ne 0 ];
+ 
+  if [ $? -ne 0 ]; 
     then
       echo -e "\e[0;41mShell script  failed: return a $? code response. Abort!\e[0m";
       exit 4;
@@ -125,7 +125,7 @@ if [ "$command" = "5" ]; then
 
   read accept
 
-  if [ "$accept" != "Y" ]; then
+  if [ "$accept" != "Y" ]; then 
     docker-compose up
     exit 0;
   fi
@@ -179,7 +179,7 @@ if [ "$command" = "11" ]; then
 fi
 
 if [ "$command" = "12" ]; then
-  docker rmi $(docker images --quiet --filter "dangling=true")
+  docker rmi -f $(docker images --quiet --filter "dangling=true")
   exit 0;
 fi
 
