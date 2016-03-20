@@ -22,18 +22,18 @@ cat << "EOF"
    '-. (__..-"       \    4. Run shell script in a node container     (npm update, gulp build, grunt build etc)
       \          a    |   5. Boot application stack                   (docker-compose up)
        ',.__.   ,__.-'/   6. Reboot application stack                 (docker-compose restart)
-         '--/_.'----'`    7. Shutdown application stack               (docker-compose stop && docker-compose rm)
-                          8. Show running containers                  (docker ps)
-                          9. Show local images                        (docker images)
-                          10. Build Docker Image for production       (sh docker/build-docker-image.sh)
-                          11. Remove local dangling images (tag=none) (docker rmi $(docker images --quiet --filter "dangling=true"))
-                          12. Remove local image by name              (docker rmi -f $(docker images | grep $imagename | awk '{ print $3 }'))
-                          13. Login to dockerhub                      (docker login)
-                          14. Inspect container property              (docker inspect <container_id>)
-                          15. Inspect container logs                  (docker logs -f <container_id> 2>&1 | grep $needle)
-                          16. Inspect memory / CPU / IO of containers (docker ps -q | xargs docker stats)
-                          17. Delete all stopped containers           (docker rm $(docker ps -a -q))
-
+         '--/_.'----'`    7. Hard Reboot application stack            (docker-compose stop / rm / rmi -f / up -d)
+                          8. Shutdown application stack               (docker-compose stop && docker-compose rm)
+                          9. Show running containers                  (docker ps)
+                          10. Show local images                       (docker images)
+                          11. Build Docker Image for production       (sh docker/build-docker-image.sh)
+                          12. Remove local dangling images (tag=none) (docker rmi $(docker images --quiet --filter "dangling=true"))
+                          13. Remove local image by name              (docker rmi -f $(docker images | grep $imagename | awk '{ print $3 }'))
+                          14. Login to dockerhub                      (docker login)
+                          15. Inspect container property              (docker inspect <container_id>)
+                          16. Inspect container logs                  (docker logs -f <container_id> 2>&1 | grep $needle)
+                          17. Inspect memory / CPU / IO of containers (docker ps -q | xargs docker stats)
+                          18. Delete all stopped containers           (docker rm $(docker ps -a -q))
 
 EOF
 
@@ -142,36 +142,48 @@ if [ "$command" = "6" ]; then
 fi
 
 if [ "$command" = "7" ]; then
-
+  while [ -z $removeimagename ]; do
+    printf "\e[1;46mEnter image name to remove:\e[0m ";
+    read -r removeimagename;
+  done
   docker-compose stop
   docker-compose rm
+  docker rmi -f $(docker images | grep $removeimagename | awk '{ print $3 }')
+  docker-compose up -d
 
   exit 0;
 fi
 
 
 if [ "$command" = "8" ]; then
+  docker-compose stop
+  docker-compose rm
+  exit 0;
+fi
+
+
+if [ "$command" = "9" ]; then
   docker ps
   exit 8;
 fi
 
-if [ "$command" = "9" ]; then
+if [ "$command" = "10" ]; then
   docker images
   exit 0;
 fi
 
-if [ "$command" = "10" ]; then
+if [ "$command" = "11" ]; then
   echo -e "\e[0;42mBuild Docker Image.\e[0m";
   sh ./docker/build-docker-image.sh
   exit 0;
 fi
 
-if [ "$command" = "11" ]; then
+if [ "$command" = "12" ]; then
   docker rmi -f $(docker images --quiet --filter "dangling=true")
   exit 0;
 fi
 
-if [ "$command" = "12" ]; then
+if [ "$command" = "13" ]; then
   while [ -z $removeimagename ]; do
     printf "\e[1;46mEnter image name to remove:\e[0m ";
     read -r removeimagename;
@@ -180,12 +192,12 @@ if [ "$command" = "12" ]; then
   exit 0;
 fi
 
-if [ "$command" = "13" ]; then
+if [ "$command" = "14" ]; then
   docker login
   exit 0;
 fi
 
-if [ "$command" = "14" ]; then
+if [ "$command" = "15" ]; then
   while [ -z $containerid ]; do
     printf "\e[1;46mEnter container ID:\e[0m ";
     read -r containerid;
@@ -194,7 +206,7 @@ if [ "$command" = "14" ]; then
   exit 0;
 fi
 
-if [ "$command" = "15" ]; then
+if [ "$command" = "16" ]; then
 
   while [ -z $containerid ]; do
     printf "\e[1;46mEnter container ID:\e[0m ";
@@ -212,12 +224,12 @@ if [ "$command" = "15" ]; then
   exit 0;
 fi
 
-if [ "$command" = "16" ]; then
+if [ "$command" = "17" ]; then
   docker ps -q | xargs docker stats
   exit 0;
 fi
 
-if [ "$command" = "17" ]; then
+if [ "$command" = "18" ]; then
   docker rm $(docker ps -a -q)
   exit 0;
 fi
