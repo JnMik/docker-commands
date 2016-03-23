@@ -34,6 +34,7 @@ cat << "EOF"
                           16. Inspect container logs                  (docker logs -f <container_id> 2>&1 | grep $needle)
                           17. Inspect memory / CPU / IO of containers (docker ps -q | xargs docker stats)
                           18. Delete all stopped containers           (docker rm $(docker ps -a -q))
+                          19. Delete all images                       (docker rmi -f $(docker images))
 
 EOF
 
@@ -231,5 +232,11 @@ fi
 
 if [ "$command" = "18" ]; then
   docker rm $(docker ps -a -q)
+  exit 0;
+fi
+
+
+if [ "$command" = "19" ]; then
+  docker rmi -f $(docker images)
   exit 0;
 fi
