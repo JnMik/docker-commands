@@ -35,6 +35,7 @@ cat << "EOF"
                           17. Inspect memory / CPU / IO of containers (docker ps -q | xargs docker stats)
                           18. Delete all stopped containers           (docker rm $(docker ps -a -q))
                           19. Delete all images                       (docker rmi -f $(docker images))
+                          20. Delete all containers                   (docker rm -f $(docker ps -a)))
 
 EOF
 
@@ -238,5 +239,11 @@ fi
 
 if [ "$command" = "19" ]; then
   docker rmi -f $(docker images)
+  exit 0;
+fi
+
+
+if [ "$command" = "20" ]; then
+  docker rm -f $(docker ps -a)
   exit 0;
 fi
