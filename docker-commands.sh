@@ -25,19 +25,20 @@ cat << "EOF"
          '--/_.'----'`    7. Hard Reboot application stack            (docker-compose stop / rm / rmi -f / up -d)
                           8. Shutdown application stack               (docker-compose stop)
                           9. Hard Shutdown application stack          (docker-compose stop && docker-compose rm)
-                          10. Show running containers                  (docker ps)
+                          10. Show running containers                 (docker ps)
                           11. Show local images                       (docker images)
                           12. Build Docker Image for production       (sh docker/build-docker-image.sh)
                           13. Remove local dangling images (tag=none) (docker rmi $(docker images --quiet --filter "dangling=true"))
                           14. Remove local image by name              (docker rmi -f $(docker images | grep $imagename | awk '{ print $3 }'))
                           15. Login to dockerhub                      (docker login)
-                          16. Inspect container properties              (docker inspect <container_id>)
+                          16. Inspect container properties            (docker inspect <container_id>)
                           17. Inspect container logs                  (docker logs -f <container_id> 2>&1 | grep $needle)
                           18. Inspect memory / CPU / IO of containers (docker ps -q | xargs docker stats)
                           19. Delete all stopped containers           (docker rm $(docker ps -a -q))
                           20. Delete all images                       (docker rmi -f $(docker images))
                           21. Delete all containers                   (docker rm -f $(docker ps -a)))
                           22. Run command on all containers           (Loop through every containers for <image_name> and run command with docker exec)
+                          23. Kill all containers by name           (docker kill $(docker ps | grep $needle) && docker rm -f $(docker ps | grep $needle))
 
 EOF
 
@@ -288,3 +289,36 @@ if [ "$command" = "22" ]; then
 
   exit 0;
 fi
+
+if [ "$command" = "23" ]; then
+
+  while [ -z $imagename ]; do
+    printf "\e[1;46mEnter image name for containers your want to execute the command, wilcard accepted.:\e[0m ";
+    read -r imagename;
+  done
+
+  CONTAINER_ID=($(docker ps | grep $imagename | awk '{ print $1 }'))
+
+  echo "List of containers to kill:"
+
+  for i in "${CONTAINER_ID[@]}"
+  do
+    echo "$i"
+  done
+
+  echo -e "Kill all containers from image $imagename? [Y/n]"
+
+  read accept
+
+  if [ "$accept" != "Y" ]; then
+    exit 0;
+  fi
+
+  for i in "${CONTAINER_ID[@]}"
+  do
+    docker kill $i && docker rm -f $i
+  done
+
+  exit 0;
+fi
+
