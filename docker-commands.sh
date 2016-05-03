@@ -38,7 +38,7 @@ cat << "EOF"
                           20. Delete all images                       (docker rmi -f $(docker images))
                           21. Delete all containers                   (docker rm -f $(docker ps -a)))
                           22. Run command on all containers           (Loop through every containers for <image_name> and run command with docker exec)
-                          23. Kill all containers by name           (docker kill $(docker ps | grep $needle) && docker rm -f $(docker ps | grep $needle))
+                          23. Kill all containers by name             (docker kill $(docker ps | grep $needle) && docker rm -f $(docker ps | grep $needle))
 
 EOF
 
