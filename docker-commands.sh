@@ -28,7 +28,7 @@ cat << "EOF"
                           10. Show running containers                 (docker ps)
                           11. Show local images                       (docker images)
                           12. Build Docker Image for production       (sh docker/build-docker-image.sh)
-                          13. Remove local dangling images (tag=none) (docker rmi $(docker images --quiet --filter "dangling=true"))
+                          13. Remove local dangling images (tag=none) (docker rmi -f $(docker images --quiet --filter "dangling=true"))
                           14. Remove local image by name              (docker rmi -f $(docker images | grep $imagename | awk '{ print $3 }'))
                           15. Login to dockerhub                      (docker login)
                           16. Inspect container properties            (docker inspect <container_id>)
