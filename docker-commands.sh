@@ -39,6 +39,7 @@ cat << "EOF"
                           21. Delete all containers                   (docker rm -f $(docker ps -a)))
                           22. Run command on all containers           (Loop through every containers for <image_name> and run command with docker exec)
                           23. Kill all containers by name             (docker kill $(docker ps | grep $needle) && docker rm -f $(docker ps | grep $needle))
+                          24. Delete all images, fix corruption       (mv /var/lib/docker{,-old})
 
 EOF
 
@@ -321,4 +322,20 @@ if [ "$command" = "23" ]; then
 
   exit 0;
 fi
+
+if [ "$command" = "24" ]; then
+
+  echo -e "Massive flush of images, fix corruption"
+  service docker stop
+  mv /var/lib/docker{,-old}
+  service docker start
+  # Fix that error
+  #ERROR: for craffiliate  Cannot start container c68983b2fde4ab3bc09cdf36cdb1ad7d7643d574d761e76b4ac6871574162929: [8] System error: not a directory
+  #Traceback (most recent call last):
+  #  File "<string>", line 3, in <module>
+  #  File "compose/cli/main.py", line 63, in main
+  #AttributeError: 'ProjectError' object has no attribute 'msg'
+  exit 0;
+fi
+
 
